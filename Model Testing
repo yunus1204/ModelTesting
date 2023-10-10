@@ -1,0 +1,29 @@
+
+
+from tensorflow.keras.models import load_model
+
+# Load the pre-trained model
+model = load_model(r'C:\Users\welco\Downloads\archive (1)\Plant Diseases Classification Models\Plant Diseases Classification Models\plant disease_99.80.h5')
+
+from tensorflow.keras.preprocessing import image
+import numpy as np
+
+# Load and preproces the input image
+img_path = r"C:\Users\welco\Downloads\IMG_20230319_203932.jpg"
+img = image.load_img(img_path, target_size=(200, 200,3))  # Adjust target size to match your model
+img_array = image.img_to_array(img)
+img_array = np.expand_dims(img_array, axis=0)
+img_array = img_array / 255.0  # Normalize pixel values
+
+# Make predictions
+predictions = model.predict(img_array)
+
+# Get the class with the highest probability
+predicted_class = np.argmax(predictions)
+
+# Depending on your model and dataset, you may also need to map the class index to the corresponding disease label
+class_labels = ['Apple Apple scab', 'Apple Black rot', 'Apple Cedar apple rust','Apple healthy','Bacterial leaf blight in rice leaf','Blight in corn Leaf','Blueberry healthy','Brown spot in rice leaf','Cercospora leaf spot','Cherry (including sour) Powdery mildew','Cherry (including_sour) healthy','Common Rust in corn Leaf','Corn (maize) healthy','Garlic','Grape Black rot','Grape Esca Black Measles','Grape Leaf blight Isariopsis Leaf Spot','Grape healthy','Gray Leaf Spot in corn Leaf','Leaf smut in rice leaf','Orange Haunglongbing Citrus greening','Peach healthy','Pepper bell Bacterial spot','Pepper bell healthy','Potato Early blight','Potato Late blight','Potato healthy','Raspberry healthy','Sogatella rice','Soybean healthy','Strawberry Leaf scorch','Strawberry healthy','Tomato Bacterial spot','Tomato Early blight','Tomato Late blight','Tomato Leaf Mold','Tomato Septoria leaf spot','Tomato Spider mites Two spotted spider mite','Tomato Target Spot','Tomato Tomato mosaic virus','Tomato healthy','algal leaf in tea','anthracnose in tea','bird eye spot in tea','brown blight in tea','cabbage looper','corn crop','ginger','healthy tea leaf','lemon canker','onion','potassium deficiency in plant','potato crop','potato hollow heart','red leaf spot in tea','tomato canker']  # Replace with your actual class labels
+predicted_disease = class_labels[predicted_class]
+
+
+print(f"The plant is predicted to have: {predicted_disease} disease.")
